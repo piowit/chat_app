@@ -15,9 +15,14 @@
     <%= render @messages %>
   </div>
 
-  <%= form_with model: @message, url: messages_path, id: "message_form" do |f| %>
-    <%= f.hidden_field :conversation_id, value: @conversation.id %>
-    <%= f.text_field :content, placeholder: "Type a message...", autofocus: true %>
-    <%= f.submit "Send" %>
-  <% end %>
+  <div style="padding-bottom: 16px;" data-controller="typing"
+       data-typing-conversation-id-value="<%= @conversation.id %>"
+       data-typing-current-user-id-value="<%= @current_user&.id %>">
+    <small data-typing-target="indicator" style="color: gray; min-height: 1em; display: block;"></small>
+    <%= form_with model: @message, url: messages_path, id: "message_form" do |f| %>
+      <%= f.hidden_field :conversation_id, value: @conversation.id %>
+      <%= f.text_field :content, placeholder: "Type a message...", autofocus: true, data: { typing_target: "input", action: "input->typing#onInput" } %>
+      <%= f.submit "Send" %>
+    <% end %>
+  </div>
 </div>
