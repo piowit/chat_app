@@ -1,0 +1,59 @@
+<h1>Chat App</h1>
+
+<% if @current_user %>
+  <p>
+    Logged in as: <strong><%= @current_user.username %></strong>
+    <%= button_to "Switch user", logout_path, method: :delete %>
+  </p>
+
+  <h2>Start a conversation</h2>
+  <% if @other_users.any? %>
+    <ul>
+      <% @other_users.each do |user| %>
+        <li>
+          <%= user.username %>
+          <%= button_to "Start conversation", start_conversation_path, params: { other_user_id: user.id } %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No other users yet. Create one in another browser!</p>
+  <% end %>
+
+  <h2>Your conversations</h2>
+  <% if @conversations.any? %>
+    <ul>
+      <% @conversations.each do |conversation| %>
+        <li>
+          <%= link_to conversation_path(conversation) do %>
+            With: <%= conversation.users.where.not(id: @current_user.id).pluck(:username).join(", ") %>
+            (<%= conversation.messages.count %> messages)
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No conversations yet.</p>
+  <% end %>
+
+<% else %>
+  <h2>Create a new user</h2>
+  <%= form_with model: User.new, url: users_path do |f| %>
+    <%= f.label :username %>
+    <%= f.text_field :username %>
+    <%= f.submit "Create" %>
+  <% end %>
+
+  <h2>Or select an existing user</h2>
+  <% if @users.any? %>
+    <ul>
+      <% @users.each do |user| %>
+        <li>
+          <%= button_to user.username, select_user_path, params: { user_id: user.id } %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No users yet. Create one above!</p>
+  <% end %>
+<% end %>
