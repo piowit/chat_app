@@ -1,17 +1,19 @@
-<h1>Conversation</h1>
-<p>
-  With: <%= @conversation.users.where.not(id: @current_user&.id).pluck(:username).join(", ") %>
-  | <%= link_to "Back to home", root_path %>
-</p>
+<div style="display: flex; flex-direction: column; flex: 1; min-height: 0;">
+  <h1>Conversation</h1>
+  <p>
+    With: <%= @conversation.users.where.not(id: @current_user&.id).pluck(:username).join(", ") %>
+    | <%= link_to "Back to home", root_path %>
+  </p>
 
-<%= turbo_stream_from @conversation %>
+  <%= turbo_stream_from @conversation %>
 
-<div id="messages" style="border: 1px solid #ccc; padding: 16px; min-height: 300px; margin-bottom: 16px;">
-  <%= render @messages %>
+  <div id="messages" style="flex: 1; min-height: 0; overflow-y: auto; border: 1px solid #ccc; padding: 16px; margin-bottom: 16px;">
+    <%= render @messages %>
+  </div>
+
+  <%= form_with model: @message, url: messages_path, id: "message_form" do |f| %>
+    <%= f.hidden_field :conversation_id, value: @conversation.id %>
+    <%= f.text_field :content, placeholder: "Type a message...", autofocus: true %>
+    <%= f.submit "Send" %>
+  <% end %>
 </div>
-
-<%= form_with model: @message, url: messages_path, id: "message_form" do |f| %>
-  <%= f.hidden_field :conversation_id, value: @conversation.id %>
-  <%= f.text_field :content, placeholder: "Type a message...", autofocus: true %>
-  <%= f.submit "Send" %>
-<% end %>
