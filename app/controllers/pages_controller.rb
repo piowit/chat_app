@@ -11,11 +11,13 @@ class PagesController < ApplicationController
 
   def select_user
     session[:user_id] = params[:user_id]
+    cookies.signed[:user_id] = params[:user_id]
     redirect_to root_path
   end
 
   def logout
     session.delete(:user_id)
+    cookies.delete(:user_id)
     redirect_to root_path
   end
 

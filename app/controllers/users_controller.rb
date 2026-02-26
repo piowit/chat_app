@@ -25,6 +25,7 @@ class UsersController < ApplicationController
 
     if @user.save
       session[:user_id] = @user.id
+      cookies.signed[:user_id] = @user.id
       redirect_to root_path, notice: "User was successfully created."
     else
       redirect_to root_path, alert: @user.errors.full_messages.join(", ")
