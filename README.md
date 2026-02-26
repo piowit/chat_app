@@ -1,24 +1,40 @@
-# README
+# Chat App
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Real-time chat application built with Rails, ActionCable, and Stimulus.
 
-Things you may want to cover:
+## Features
 
-* Ruby version
+- Create or select users
+- Start conversations with other users
+- Real-time message broadcasting
+- Online/offline presence indicators
+- Typing indicators
+- Auto-scroll to latest messages
 
-* System dependencies
+## Setup
 
-* Configuration
+```bash
+bundle install
+rails db:create db:migrate
+```
 
-* Database creation
+## Running
 
-* Database initialization
+Start the Rails server:
+```bash
+bin/rails server
+```
 
-* How to run the test suite
+Start Sidekiq (in another terminal):
+```bash
+bundle exec sidekiq
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+Make sure Redis is running on `localhost:16381` (dev) or set `REDIS_URL` env var.
 
-* Deployment instructions
+## Architecture
 
-* ...
+- **Models**: User, Conversation, Participant, Message
+- **ActionCable**: PresenceChannel, TypingChannel
+- **Stimulus Controllers**: presence, typing, message_styling, scroll_to_bottom
+- **Real-time**: Turbo Streams + ActionCable over Redis
