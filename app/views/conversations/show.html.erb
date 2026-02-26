@@ -2,6 +2,7 @@
   <h1>Conversation</h1>
   <p>
     With: <%= @conversation.users.where.not(id: @current_user&.id).pluck(:username).join(", ") %>
+    <%= render "shared/presence_indicator", conversation: @conversation, current_user_id: @current_user&.id %>
     | <%= link_to "Back to home", root_path %>
   </p>
 
