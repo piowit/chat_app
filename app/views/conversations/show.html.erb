@@ -7,7 +7,10 @@
 
   <%= turbo_stream_from @conversation %>
 
-  <div id="messages" style="flex: 1; min-height: 0; overflow-y: auto; border: 1px solid #ccc; padding: 16px; margin-bottom: 16px;">
+  <div id="messages"
+       data-controller="scroll-to-bottom message-styling"
+       data-message-styling-current-user-id-value="<%= @current_user&.id %>"
+       style="flex: 1; min-height: 0; overflow-y: auto; border: 1px solid #ccc; padding: 16px; margin-bottom: 16px;">
     <%= render @messages %>
   </div>
 
