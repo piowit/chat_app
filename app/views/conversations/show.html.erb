@@ -6,14 +6,7 @@
 
 <div style="border: 1px solid #ccc; padding: 16px; min-height: 300px; margin-bottom: 16px;">
   <% if @messages.any? %>
-    <% @messages.each do |message| %>
-      <p>
-        <strong><%= message.user.username %></strong>
-        <small><%= message.created_at.strftime("%H:%M:%S") %></small>
-        <br>
-        <%= message.content %>
-      </p>
-    <% end %>
+    <%= render @messages %>
   <% else %>
     <p>No messages yet.</p>
   <% end %>
