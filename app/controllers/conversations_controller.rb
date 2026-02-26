@@ -8,6 +8,9 @@ class ConversationsController < ApplicationController
 
   # GET /conversations/1 or /conversations/1.json
   def show
+    @messages = @conversation.messages.includes(:user).order(:created_at)
+    @current_user = User.find_by(id: session[:user_id])
+    @message = Message.new
   end
 
   # GET /conversations/new

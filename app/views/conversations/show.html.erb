@@ -1,10 +1,26 @@
-<p style="color: green"><%= notice %></p>
+<h1>Conversation</h1>
+<p>
+  With: <%= @conversation.users.where.not(id: @current_user&.id).pluck(:username).join(", ") %>
+  | <%= link_to "Back to home", root_path %>
+</p>
 
-<%= render @conversation %>
-
-<div>
-  <%= link_to "Edit this conversation", edit_conversation_path(@conversation) %> |
-  <%= link_to "Back to conversations", conversations_path %>
-
-  <%= button_to "Destroy this conversation", @conversation, method: :delete %>
+<div style="border: 1px solid #ccc; padding: 16px; min-height: 300px; margin-bottom: 16px;">
+  <% if @messages.any? %>
+    <% @messages.each do |message| %>
+      <p>
+        <strong><%= message.user.username %></strong>
+        <small><%= message.created_at.strftime("%H:%M:%S") %></small>
+        <br>
+        <%= message.content %>
+      </p>
+    <% end %>
+  <% else %>
+    <p>No messages yet.</p>
+  <% end %>
 </div>
+
+<%= form_with model: @message, url: messages_path do |f| %>
+  <%= f.hidden_field :conversation_id, value: @conversation.id %>
+  <%= f.text_field :content, placeholder: "Type a message...", autofocus: true %>
+  <%= f.submit "Send" %>
+<% end %>
