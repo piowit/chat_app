@@ -10,6 +10,27 @@
   </head>
 
   <body>
-    <%= yield %>
+    <nav style="background: #333; padding: 10px 20px; margin-bottom: 20px;">
+      <div style="max-width: 800px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+        <%= link_to "ChatApp", root_path, style: "color: #fff; text-decoration: none; font-weight: bold; font-size: 18px;" %>
+        <% if (current_user = User.find_by(id: session[:user_id])) %>
+          <div style="color: #ccc;">
+            Logged in as: <strong style="color: #fff;"><%= current_user.username %></strong>
+            <%= button_to "Logout", logout_path, method: :delete, style: "background: none; border: 1px solid #ccc; color: #ccc; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-left: 8px;" %>
+          </div>
+        <% end %>
+      </div>
+    </nav>
+
+    <div style="max-width: 800px; margin: 0 auto; padding: 0 20px;">
+      <% if notice.present? %>
+        <p style="color: green;"><%= notice %></p>
+      <% end %>
+      <% if alert.present? %>
+        <p style="color: red;"><%= alert %></p>
+      <% end %>
+
+      <%= yield %>
+    </div>
   </body>
 </html>
