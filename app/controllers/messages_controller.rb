@@ -25,7 +25,10 @@ class MessagesController < ApplicationController
     @message.user_id = session[:user_id]
 
     if @message.save
-      redirect_to conversation_path(@message.conversation)
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to conversation_path(@message.conversation) }
+      end
     else
       redirect_to conversation_path(@message.conversation), alert: @message.errors.full_messages.join(", ")
     end

@@ -1,0 +1,7 @@
+<%= turbo_stream.replace "message_form" do %>
+  <%= form_with model: Message.new, url: messages_path, id: "message_form" do |f| %>
+    <%= f.hidden_field :conversation_id, value: @message.conversation_id %>
+    <%= f.text_field :content, placeholder: "Type a message...", autofocus: true %>
+    <%= f.submit "Send" %>
+  <% end %>
+<% end %>

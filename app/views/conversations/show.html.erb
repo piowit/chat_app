@@ -4,15 +4,13 @@
   | <%= link_to "Back to home", root_path %>
 </p>
 
-<div style="border: 1px solid #ccc; padding: 16px; min-height: 300px; margin-bottom: 16px;">
-  <% if @messages.any? %>
-    <%= render @messages %>
-  <% else %>
-    <p>No messages yet.</p>
-  <% end %>
+<%= turbo_stream_from @conversation %>
+
+<div id="messages" style="border: 1px solid #ccc; padding: 16px; min-height: 300px; margin-bottom: 16px;">
+  <%= render @messages %>
 </div>
 
-<%= form_with model: @message, url: messages_path do |f| %>
+<%= form_with model: @message, url: messages_path, id: "message_form" do |f| %>
   <%= f.hidden_field :conversation_id, value: @conversation.id %>
   <%= f.text_field :content, placeholder: "Type a message...", autofocus: true %>
   <%= f.submit "Send" %>
