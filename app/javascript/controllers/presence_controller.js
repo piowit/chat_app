@@ -3,9 +3,11 @@ import consumer from "channels/consumer"
 
 export default class extends Controller {
   static values = { conversationId: Number, currentUserId: Number }
-  static targets = ["indicator"]
 
   connect() {
+    this.indicator = document.createElement("span")
+    this.element.appendChild(this.indicator)
+
     this.channel = consumer.subscriptions.create(
       { channel: "PresenceChannel", conversation_id: this.conversationIdValue },
       {
@@ -34,12 +36,12 @@ export default class extends Controller {
   }
 
   handleReceived(data) {
-    if (data.type === "presence") {
-      const otherUserOnline = data.online_user_ids.some(
-        id => id !== this.currentUserIdValue
-      )
-      this.indicatorTarget.textContent = otherUserOnline ? "● Online" : "● Offline"
-      this.indicatorTarget.style.color = otherUserOnline ? "green" : "gray"
-    }
+    if (data.type !== "presence") return
+
+    const otherUserOnline = data.online_user_ids.some(
+      id => id !== this.currentUserIdValue
+    )
+    this.indicator.textContent = otherUserOnline ? "● Online" : "● Offline"
+    this.indicator.style.color = otherUserOnline ? "green" : "gray"
   }
 }
